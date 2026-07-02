@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LMS Video Lock - Hệ Thống Kiểm Thử Video</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sky-blue: #0ea5e9;
+            --sky-blue-hover: #0284c7;
+            --sky-light: #f0f9ff;
+            --bg-dark: #0f172a;
+            --bg-card: #ffffff;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-col: column;
+            padding-bottom: 2rem;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        header h1 span {
+            color: var(--sky-blue);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 2px solid var(--sky-light);
+            padding-bottom: 0.5rem;
+        }
+
+        /* Video area */
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+            aspect-ratio: 16/9;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Controls / Form element styling */
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 0.5rem;
+        }
+
+        select, input[type="range"] {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: #f8fafc;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        select:focus {
+            border-color: var(--sky-blue);
+            background-color: #fff;
+        }
+
+        /* Stats dashboard */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .stat-box {
+            background-color: var(--sky-light);
+            border: 1px solid #e0f2fe;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #0369a1;
+        }
+
+        .status-badge {
+            grid-column: span 2;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-align: center;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .status-watching {
+            background-color: #fef3c7;
+            color: #d97706;
+            border: 1px solid #fde68a;
+        }
+
+        .status-completed {
+            background-color: #d1fae5;
+            color: var(--success);
+            border: 1px solid #a7f3d0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .console {
+            background-color: #0f172a;
+            color: #38bdf8;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 1rem;
+            border-radius: 8px;
+            height: 180px;
+            overflow-y: auto;
+            font-size: 0.85rem;
+            border: 1px solid #1e293b;
+        }
+
+        .console-line {
+            margin-bottom: 0.25rem;
+            line-height: 1.4;
+        }
+
+        .console-time {
+            color: #64748b;
+            margin-right: 0.5rem;
+        }
+
+        .mode-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            background: #f1f5f9;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            border-left: 3px solid var(--sky-blue);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🎓 LMS Video <span>Lock System</span></h1>
+        <div style="font-size: 0.9rem; color: #94a3b8;">Môi trường giả lập bảo mật</div>
+    </header>
+
+    <div class="container">
+        <!-- Cột trái: Trình phát video và Console logs -->
+        <div>
+            <div class="card">
+                <div class="card-title">🎥 Trình Phát Video Bài Học</div>
+                <div class="video-wrapper">
+                    <video id="test-video" controls muted playsinline>
+                        <source src="/video.mp4" type="video/mp4">
+                        Trình duyệt không hỗ trợ thẻ video.
+                    </video>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">💻 Nhật Ký Hệ Thống (Console Logs)</div>
+                <div class="console" id="system-console">
+                    <div class="console-line"><span class="console-time">[00:00:00]</span>Hệ thống sẵn sàng. Đang chờ phát video...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cột phải: Cấu hình và Chỉ số thực tế -->
+        <div>
+            <div class="card">
+                <div class="card-title">🛡️ Cấu Hình Bảo Mật</div>
+                
+                <div class="form-group">
+                    <label for="security-mode">Chế độ khóa bảo mật</label>
+                    <select id="security-mode">
+                        <option value="1">Cấp độ 1: Chặn tua cơ bản (Snap-back)</option>
+                        <option value="2">Cấp độ 2: Tích lũy thời gian thực</option>
+                        <option value="3" selected>Cấp độ 3: Wall-clock + Giới hạn tốc độ</option>
+                    </select>
+                    <div class="mode-desc" id="mode-description">
+                        Chế độ 3: Giới hạn tốc độ tối đa 2x. Kiểm tra tổng thời gian phát thực tế khớp với đồng hồ hệ thống.
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="required-progress">Yêu cầu hoàn thành (%): <span id="progress-val">90</span>%</label>
+                    <input type="range" id="required-progress" min="10" max="100" value="90">
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📊 Chỉ Số Thực Tế</div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-label">Thời gian tích lũy</div>
+                        <div class="stat-value" id="stat-accumulated">0.0s</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Đồng hồ hệ thống</div>
+                        <div class="stat-value" id="stat-wall-clock">0.0s</div>
+                    </div>
+                    <div class="status-badge status-watching" id="stat-status">
+                        ⏳ ĐANG XEM...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const video = document.getElementById('test-video');
+        const consoleEl = document.getElementById('system-console');
+        const securityModeSelect = document.getElementById('security-mode');
+        const progressSlider = document.getElementById('required-progress');
+        const progressVal = document.getElementById('progress-val');
+        
+        const statAccumulated = document.getElementById('stat-accumulated');
+        const statWallClock = document.getElementById('stat-wall-clock');
+        const statStatus = document.getElementById('stat-status');
+        const modeDesc = document.getElementById('mode-description');
+
+        // Khởi tạo các biến theo dõi
+        let lastTime = 0;
+        let accumulatedTime = 0;
+        let wallClockStart = 0;
+        let isPlaying = false;
+        let completedTriggered = false;
+
+        const modeTexts = {
+            "1": "Cấp độ 1: Lắng nghe sự kiện seeking. Nếu tua nhanh tiến lên phía trước > 1.5s, vị trí phát sẽ bị kéo lùi về vị trí cũ.",
+            "2": "Cấp độ 2: Chỉ ghi nhận thời gian xem thực tế từng giây một. Không cho phép tua vượt quá để tích lũy nhanh.",
+            "3": "Cấp độ 3: Khóa playbackRate tối đa 2x. Đo đạc thời gian thực bằng performance.now() để chặn việc tua nhanh bằng code."
+        };
+
+        // Ghi nhật ký console ảo
+        function logMsg(msg) {
+            const now = new Date();
+            const timeStr = now.toTimeString().split(' ')[0];
+            const line = document.createElement('div');
+            line.className = 'console-line';
+            line.innerHTML = `<span class="console-time">[${timeStr}]</span>${msg}`;
+            consoleEl.appendChild(line);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+
+        securityModeSelect.addEventListener('change', (e) => {
+            const mode = e.target.value;
+            modeDesc.innerText = modeTexts[mode];
+            logMsg(`Đã chuyển sang ${modeTexts[mode]}`);
+            resetStats();
+        });
+
+        progressSlider.addEventListener('input', (e) => {
+            progressVal.innerText = e.target.value;
+            checkCompletion();
+        });
+
+        function resetStats() {
+            accumulatedTime = 0;
+            wallClockStart = 0;
+            isPlaying = false;
+            completedTriggered = false;
+            statAccumulated.innerText = "0.0s";
+            statWallClock.innerText = "0.0s";
+            statStatus.className = "status-badge status-watching";
+            statStatus.innerText = "⏳ ĐANG XEM...";
+        }
+
+        // Theo dõi sự thay đổi tốc độ
+        video.addEventListener('ratechange', () => {
+            const mode = securityModeSelect.value;
+            if (mode === "3" && video.playbackRate > 2.0) {
+                logMsg(`⚠️ Phát hiện thay đổi tốc độ phát: ${video.playbackRate}x! Ép về 1.0x.`);
+                video.playbackRate = 1.0;
+            }
+        });
+
+        // Theo dõi sự kiện play/pause
+        video.addEventListener('play', () => {
+            isPlaying = true;
+            if (wallClockStart === 0) {
+                wallClockStart = performance.now();
+            }
+            logMsg("▶ Video bắt đầu phát.");
+        });
+
+        video.addEventListener('pause', () => {
+            isPlaying = false;
+            logMsg("⏸ Video tạm dừng.");
+        });
+
+        // Lắng nghe sự kiện seeking (tua)
+        video.addEventListener('seeking', () => {
+            const mode = securityModeSelect.value;
+            const currentTime = video.currentTime;
+            
+            if (mode === "1") {
+                const diff = currentTime - lastTime;
+                if (diff > 1.5) {
+                    logMsg(`🚫 Phát hiện tua nhanh (+${diff.toFixed(1)}s). Ép lùi về ${lastTime.toFixed(1)}s.`);
+                    video.currentTime = lastTime;
+                }
+            }
+        });
+
+        // Cập nhật thời gian phát
+        video.addEventListener('timeupdate', () => {
+            const currentTime = video.currentTime;
+            const mode = securityModeSelect.value;
+
+            if (isPlaying) {
+                const diff = currentTime - lastTime;
+                // Nếu video phát bình thường (không nhảy cóc)
+                if (diff > 0 && diff < 1.5) {
+                    accumulatedTime += diff;
+                    statAccumulated.innerText = `${accumulatedTime.toFixed(1)}s`;
+                    
+                    if (wallClockStart > 0) {
+                        const elapsedReal = (performance.now() - wallClockStart) / 1000;
+                        statWallClock.innerText = `${elapsedReal.toFixed(1)}s`;
+                    }
+                }
+            }
+            lastTime = currentTime;
+            checkCompletion();
+        });
+
+        // Gửi tín hiệu hoàn thành lên server
+        window.sendCompletionStatus = function(completed) {
+            fetch('/api/lessons/complete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    completed: completed,
+                    progress_percent: Math.round((accumulatedTime / (video.duration || 1)) * 100),
+                    watched_seconds: Math.round(accumulatedTime)
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                logMsg(`[API] Đã đồng bộ trạng thái hoàn thành với Server thành công!`);
+            })
+            .catch(err => {
+                logMsg(`[API] Lỗi gửi trạng thái hoàn thành: ${err}`);
+            });
+        };
+
+        // Kiểm tra xem bài học đã hoàn thành chưa
+        window.checkCompletion = function() {
+            if (completedTriggered) return;
+
+            const duration = video.duration || 0;
+            if (duration === 0) return;
+
+            const reqPercent = parseFloat(progressSlider.value) / 100;
+            const reqTime = duration * reqPercent;
+            const mode = securityModeSelect.value;
+
+            let isPassed = false;
+
+            if (mode === "1") {
+                // Chỉ cần vị trí phát đạt yêu cầu
+                if (video.currentTime >= reqTime) {
+                    isPassed = true;
+                }
+            } else if (mode === "2") {
+                // Thời gian tích lũy phải đạt yêu cầu
+                if (accumulatedTime >= reqTime) {
+                    isPassed = true;
+                }
+            } else if (mode === "3") {
+                // Cả tích lũy và đồng hồ thực đều phải đạt yêu cầu (tối thiểu một nửa thời lượng nếu chạy 2x)
+                const realElapsed = wallClockStart > 0 ? (performance.now() - wallClockStart) / 1000 : 0;
+                if (accumulatedTime >= reqTime && realElapsed >= (reqTime / 2)) {
+                    isPassed = true;
+                }
+            }
+
+            if (isPassed) {
+                completedTriggered = true;
+                statStatus.className = "status-badge status-completed";
+                statStatus.innerText = "🎉 HOÀN THÀNH BÀI HỌC";
+                logMsg("🎉 Chúc mừng! Bạn đã hoàn thành bài học đạt chuẩn yêu cầu!");
+                sendCompletionStatus(true);
+            }
+        };
+    </script>
+</body>
+</html>

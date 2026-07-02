@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống Học tập Trực tuyến - Bài kiểm tra trắc nghiệm</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --primary-light: #e0e7ff;
+            --sky-blue: #0ea5e9;
+            --sky-light: #f0f9ff;
+            --bg-dark: #0f172a;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            user-select: none; /* Disable copy/paste */
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        header h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        header h1 span {
+            color: var(--sky-blue);
+        }
+
+        .header-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .meta-item.timer {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            font-weight: 600;
+        }
+
+        .meta-item.violation {
+            background: rgba(245, 158, 11, 0.2);
+            border-color: rgba(245, 158, 11, 0.3);
+            color: #fcd34d;
+        }
+
+        /* Fullscreen Cover Page */
+        #cover-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .cover-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3rem;
+            border-radius: 24px;
+            max-width: 600px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+        }
+
+        .cover-card h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #6366f1, #38bdf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .rules-list {
+            text-align: left;
+            margin: 2rem 0;
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        .rules-list li {
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .rules-list li::before {
+            content: "⚠️";
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.5);
+        }
+
+        /* Main Workspace Layout */
+        .workspace {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        /* Left Navigation Panel */
+        .navigation-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            align-self: start;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .panel-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+        }
+
+        .qnbutton, .nav-item {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f5f9;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .qnbutton:hover, .nav-item:hover {
+            background: #cbd5e1;
+            color: var(--text-main);
+        }
+
+        .qnbutton.active, .nav-item.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .qnbutton.answered, .nav-item.answered {
+            background: #d1fae5;
+            color: #065f46;
+            border-color: #a7f3d0;
+        }
+
+        /* Center Content Panel */
+        .content-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .question-card, .que, .question {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            transition: border 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .question-card:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08);
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.75rem;
+        }
+
+        .question-number {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .qtext, .question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-main);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        /* Choices / Options */
+        .choices, .options, .answers {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .choice-item, .quiz-choice-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: #f8fafc;
+        }
+
+        .choice-item:hover, .quiz-choice-item:hover {
+            background-color: var(--sky-light);
+            border-color: var(--sky-blue);
+        }
+
+        .choice-item input[type="radio"], .quiz-choice-item input[type="radio"] {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-muted);
+            border-radius: 50%;
+            outline: none;
+            transition: all 0.2s ease;
+            position: relative;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .choice-item input[type="radio"]:checked, .quiz-choice-item input[type="radio"]:checked {
+            border-color: var(--primary);
+            background-color: var(--primary);
+        }
+
+        .choice-item input[type="radio"]:checked::after, .quiz-choice-item input[type="radio"]:checked::after {
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: white;
+        }
+
+        .choice-text {
+            font-size: 1rem;
+            color: var(--text-main);
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .choice-item.selected, .quiz-choice-item.selected {
+            background-color: #e0e7ff;
+            border-color: var(--primary);
+        }
+
+        /* Navigation Buttons */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .nav-btn {
+            background: #e2e8f0;
+            color: var(--text-main);
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: #cbd5e1;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-btn.btn-next {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-btn.btn-next:hover:not(:disabled) {
+            background: var(--primary-hover);
+        }
+
+        /* Warning / Violation Overlay */
+        #warning-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        #warning-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .warning-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            border: 2px solid var(--danger);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+
+        .warning-icon {
+            font-size: 3.5rem;
+            color: var(--danger);
+            margin-bottom: 1rem;
+        }
+
+        .warning-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.75rem;
+        }
+
+        .warning-desc {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .strike-container {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .strike-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            border: 1px solid var(--border-color);
+        }
+
+        .strike-dot.active {
+            background: var(--danger);
+            border-color: var(--danger);
+        }
+
+        .warning-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .warn-btn {
+            width: 100%;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .warn-btn.resume {
+            background: var(--primary);
+            color: white;
+        }
+
+        .warn-btn.resume:hover {
+            background: var(--primary-hover);
+        }
+
+        .warn-btn.submit {
+            background: #fee2e2;
+            color: var(--danger);
+            border: 1px solid #fca5a5;
+        }
+
+        .warn-btn.submit:hover {
+            background: #fecaca;
+        }
+
+        /* Success screen */
+        #success-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        #success-screen.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Toast Container & Items */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 400px;
+            width: calc(100% - 40px);
+            pointer-events: none;
+        }
+
+        .toast-item {
+            background: #ffffff;
+            color: var(--text-main);
+            border-radius: 12px;
+            padding: 16px 20px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 6px solid var(--primary);
+            pointer-events: auto;
+            transform: translateX(120%);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            opacity: 0;
+        }
+
+        .toast-item.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast-item.hide {
+            transform: translateX(120%);
+            opacity: 0;
+        }
+
+        .toast-item.warning {
+            border-left-color: var(--warning);
+        }
+
+        .toast-item.danger {
+            border-left-color: var(--danger);
+        }
+
+        .toast-item.success {
+            border-left-color: var(--success);
+        }
+
+        .toast-icon {
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toast-content {
+            flex-grow: 1;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.2rem;
+            line-height: 1;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .toast-close:hover {
+            opacity: 1;
+        }
+
+        .start-btn:disabled {
+            background: #cbd5e1 !important;
+            color: #94a3b8 !important;
+            cursor: not-allowed !important;
+            box-shadow: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cover screen screen before starting -->
+    <div id="cover-screen">
+        <div class="cover-card">
+            <h2>Thi trực tuyến LMS</h2>
+            <p style="color: var(--sky-blue); font-weight: 600;">BÀI ÔN TẬP TRIẾT HỌC MÁC - LÊNIN</p>
+            <ul class="rules-list">
+                <li>Yêu cầu bật chế độ TOÀN MÀN HÌNH (Fullscreen) trong suốt quá trình làm bài.</li>
+                <li>Không thoát toàn màn hình, chuyển tab hoặc nhấn phím F12/Ctrl+Shift+I.</li>
+                <li>Hệ thống cảnh báo vi phạm tối đa 3 lần. Quá giới hạn sẽ tự động nộp bài!</li>
+            </ul>
+            <button class="start-btn" onclick="startExam()">Bắt đầu làm bài</button>
+        </div>
+    </div>
+
+    <!-- Header bar -->
+    <header>
+        <h1>🎓 LMS Exam <span>Sandbox</span></h1>
+        <div class="header-meta">
+            <div class="meta-item timer">
+                ⏱️ Thời gian: <span id="timer-display">59:59</span>
+            </div>
+            <div class="meta-item violation">
+                ⚠️ Cảnh báo: <span id="violation-display">0/3</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <div class="workspace">
+        <!-- Left panel navigation -->
+        <div class="navigation-panel">
+            <div class="panel-title">
+                <span>Câu hỏi</span>
+                <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: normal;" id="progress-text">0/20 đã trả lời</span>
+            </div>
+            <div class="question-grid" id="navigation-grid">
+                <!-- Navigation buttons will be generated by JS -->
+            </div>
+        </div>
+
+        <!-- Center panel active question -->
+        <div class="content-panel">
+            <div class="question-card" id="question-container">
+                <div class="question-header">
+                    <span class="question-number" id="question-number-lbl">Câu hỏi 1 / 20</span>
+                </div>
+                <div class="qtext" id="question-text-lbl">
+                    Câu hỏi đang tải...
+                </div>
+                <div class="choices" id="choices-container">
+                    <!-- Choice items will be generated by JS -->
+                </div>
+            </div>
+
+            <!-- Bottom navigations -->
+            <div class="navigation-buttons">
+                <button class="nav-btn btn-prev" onclick="prevQuestion()" id="prev-btn">
+                    ⬅️ Quay lại
+                </button>
+                <button class="nav-btn btn-next" onclick="nextQuestion()" id="next-btn">
+                    Tiếp tục ➡️
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Warning screen -->
+    <div id="warning-overlay">
+        <div class="warning-card">
+            <div class="warning-icon">⚠️</div>
+            <div class="warning-title">Phát hiện vi phạm quy chế thi!</div>
+            <div class="warning-desc" id="warning-desc-text">
+                Bạn đã chuyển tab hoặc thoát khỏi màn hình kiểm tra. Vui lòng trở lại màn hình làm bài ngay lập tức.
+            </div>
+            <div class="strike-container" id="strike-dots">
+                <div class="strike-dot"></div>
+                <div class="strike-dot"></div>
+                <div class="strike-dot"></div>
+            </div>
+            <div class="warning-actions">
+                <button class="warn-btn resume" onclick="resumeExam()">Trở lại phòng thi (Fullscreen)</button>
+                <button class="warn-btn submit" onclick="submitExam()">Nộp bài ngay lập tức</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success submit screen -->
+    <div id="success-screen">
+        <div class="success-icon">🎉</div>
+        <h2>Nộp bài thành công!</h2>
+        <p style="color: var(--text-muted); margin: 1rem 0 2rem 0;">Bài làm của bạn đã được ghi nhận trên hệ thống.</p>
+        <button class="start-btn" onclick="location.reload()">Làm lại bài thi</button>
+    </div>
+
+    <script>
+        // Array of 20 questions
+        const questions = [
+            {
+                text: "Theo quan điểm của các nhà kinh điển Mác - Lênin, yếu tố nào sẽ mất dần theo sự phát triển và tiến bộ của xã hội?",
+                choices: [
+                    "Tính nhân loại và cá nhân",
+                    "Tính giai cấp và tính dân tộc",
+                    "Tính cá nhân và tính giai cấp",
+                    "Tính dân tộc và tính nhân loại"
+                ],
+                correct: 1
+            },
+            {
+                text: "Dịch nghĩa từ tiếng Anh sang tiếng Việt: \"có tài năng, có năng khiếu\"",
+                choices: [
+                    "waver",
+                    "talented",
+                    "involved",
+                    "dedication"
+                ],
+                correct: 1
+            },
+            {
+                text: "Ai là người sáng lập ra chủ nghĩa Mác - Lênin?",
+                choices: [
+                    "Các Mác và Ăng-ghen",
+                    "Lênin",
+                    "Các Mác, Ăng-ghen và Lênin",
+                    "Hồ Chí Minh"
+                ],
+                correct: 2
+            },
+            {
+                text: "Phép biện chứng duy vật nghiên cứu những mối liên hệ nào?",
+                choices: [
+                    "Mối liên hệ phổ biến",
+                    "Mối liên hệ đặc thù",
+                    "Mối liên hệ ngẫu nhiên",
+                    "Mối liên hệ nhân quả"
+                ],
+                correct: 0
+            },
+            {
+                text: "Bản chất của nhận thức theo chủ nghĩa duy vật biện chứng là gì?",
+                choices: [
+                    "Sự phản ánh chủ động, tích cực, sáng tạo hiện thực khách quan vào bộ óc con người",
+                    "Sự sao chép nguyên xi hiện thực khách quan",
+                    "Sự hồi tưởng của linh hồn về thế giới ý niệm",
+                    "Sự sáng tạo chủ quan của con người"
+                ],
+                correct: 0
+            },
+            {
+                text: "Vật chất là một phạm trù triết học dùng để chỉ cái gì?",
+                choices: [
+                    "Thực tại khách quan đem lại cho con người trong cảm giác",
+                    "Tất cả những gì tồn tại xung quanh ta",
+                    "Năng lượng và các hạt cơ bản",
+                    "Ý niệm tuyệt đối của thế giới"
+                ],
+                correct: 0
+            },
+            {
+                text: "Nguồn gốc tự nhiên của ý thức gồm những yếu tố nào?",
+                choices: [
+                    "Bộ óc người và thế giới khách quan tác động lên bộ óc người",
+                    "Lao động và ngôn ngữ",
+                    "Thần linh và các yếu tố siêu nhiên",
+                    "Sự tiến hóa sinh học của các loài sinh vật"
+                ],
+                correct: 0
+            },
+            {
+                text: "Nguồn gốc xã hội của ý thức là gì?",
+                choices: [
+                    "Lao động và ngôn ngữ",
+                    "Thế giới khách quan tác động lên giác quan",
+                    "Giao tiếp xã hội và trao đổi thông tin",
+                    "Lao động và sự phát triển của hệ thần kinh"
+                ],
+                correct: 0
+            },
+            {
+                text: "Phương thức tồn tại của vật chất là gì?",
+                choices: [
+                    "Vận động",
+                    "Không gian",
+                    "Thời gian",
+                    "Đứng im tương đối"
+                ],
+                correct: 0
+            },
+            {
+                text: "Theo định nghĩa của Lênin, thuộc tính phổ biến nhất của mọi dạng vật chất là gì?",
+                choices: [
+                    "Tồn tại khách quan ngoài ý thức",
+                    "Có khối lượng và năng lượng",
+                    "Vận động không ngừng",
+                    "Có cấu trúc nguyên tử"
+                ],
+                correct: 0
+            },
+            {
+                text: "Triết học Mác - Lênin ra đời trong điều kiện kinh tế - xã hội nào?",
+                choices: [
+                    "Sự phát triển mạnh mẽ của phương thức sản xuất tư bản chủ nghĩa dưới tác động của cách mạng công nghiệp",
+                    "Sự xuất hiện của chủ nghĩa tư bản độc quyền",
+                    "Sự phân rã của chế độ phong kiến phương Tây",
+                    "Sự thống trị của giáo hội và triết học kinh viện"
+                ],
+                correct: 0
+            },
+            {
+                text: "Ý thức xã hội phản ánh cái gì?",
+                choices: [
+                    "Tồn tại xã hội",
+                    "Đời sống tinh thần của con người",
+                    "Sự tiến bộ của xã hội",
+                    "Các quan hệ chính trị - pháp lý"
+                ],
+                correct: 0
+            },
+            {
+                text: "Lực lượng sản xuất biểu thị mối quan hệ nào?",
+                choices: [
+                    "Mối quan hệ giữa con người với tự nhiên trong quá trình sản xuất",
+                    "Mối quan hệ giữa người với người trong quá trình lao động",
+                    "Mối quan hệ phân phối sản phẩm thặng dư",
+                    "Mối quan hệ giữa giai cấp bóc lột và bị bóc lột"
+                ],
+                correct: 0
+            },
+            {
+                text: "Quy luật nào vạch ra khuynh hướng của sự phát triển?",
+                choices: [
+                    "Quy luật phủ định của phủ định",
+                    "Quy luật thống nhất và đấu tranh của các mặt đối lập",
+                    "Quy luật chuyển hóa từ những sự thay đổi về lượng thành những sự thay đổi về chất",
+                    "Quy luật giá trị thặng dư"
+                ],
+                correct: 0
+            },
+            {
+                text: "Phát biểu nào sau đây đúng về phạm trù \"Chất\" trong triết học?",
+                choices: [
+                    "Là tính quy định khách quan vốn có của sự vật, là sự thống nhất hữu cơ của các thuộc tính làm cho sự vật là nó",
+                    "Là thuộc tính biến đổi liên tục của sự vật dưới tác động của môi trường",
+                    "Là quy mô và tốc độ vận động phát triển của sự vật",
+                    "Là số lượng các thuộc tính bên ngoài của sự vật"
+                ],
+                correct: 0
+            },
+            {
+                text: "Trong hai nguồn gốc tự nhiên và xã hội của ý thức, nguồn gốc nào là trực tiếp và quyết định?",
+                choices: [
+                    "Nguồn gốc xã hội",
+                    "Nguồn gốc tự nhiên",
+                    "Cả hai nguồn gốc có vai trò ngang nhau",
+                    "Nguồn gốc sinh học tiến hóa"
+                ],
+                correct: 0
+            },
+            {
+                text: "Mối quan hệ biện chứng giữa vật chất và ý thức thể hiện ở chỗ nào?",
+                choices: [
+                    "Vật chất quyết định ý thức, ý thức có tính độc lập tương đối và tác động trở lại vật chất",
+                    "Ý thức quyết định vật chất, vật chất chỉ là biểu hiện của ý thức",
+                    "Vật chất và ý thức tồn tại hoàn toàn độc lập, không tác động qua lại",
+                    "Ý thức hoàn toàn bị động trước sự quyết định của vật chất"
+                ],
+                correct: 0
+            },
+            {
+                text: "Tiêu chuẩn khách quan của chân lý là gì?",
+                choices: [
+                    "Thực tiễn",
+                    "Sự thừa nhận của đa số mọi người",
+                    "Sự rõ ràng, hiển nhiên trong tư duy",
+                    "Sự suy luận logic, chặt chẽ"
+                ],
+                correct: 0
+            },
+            {
+                text: "Quy luật nào vạch ra nguồn gốc và động lực của sự phát triển?",
+                choices: [
+                    "Quy luật thống nhất và đấu tranh của các mặt đối lập",
+                    "Quy luật phủ định của phủ định",
+                    "Quy luật lượng - chất",
+                    "Quy luật đấu tranh giai cấp"
+                ],
+                correct: 0
+            },
+            {
+                text: "Phép biện chứng duy vật gồm mấy nguyên lý cơ bản?",
+                choices: [
+                    "2 nguyên lý",
+                    "3 nguyên lý",
+                    "6 nguyên lý",
+                    "4 nguyên lý"
+                ],
+                correct: 0
+            }
+        ];
+
+        let currentQuestionIdx = 0; // 0-based index
+        let userAnswers = {}; // Stores { questionIdx: choiceIdx }
+        let violationCount = 0;
+        let warningOverlayOpen = false;
+        let examActive = false;
+        let secondsRemaining = 60 * 60; // 60 minutes
+        let timerInterval;
+
+        const isMultiLayout = new URLSearchParams(window.location.search).get('layout') === 'multi';
+
+        // Initialize exam page state
+        function init() {
+            // Generate navigation grid buttons
+            const grid = document.getElementById("navigation-grid");
+            grid.innerHTML = "";
+            for (let i = 0; i < questions.length; i++) {
+                const btn = document.createElement("button");
+                btn.className = "qnbutton";
+                btn.id = `qnbutton-${i + 1}`;
+                btn.innerText = i + 1;
+                btn.onclick = () => {
+                    if (examActive) {
+                        if (isMultiLayout) {
+                            const card = document.getElementById(`question-card-${i + 1}`);
+                            if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            // Highlight active navigation button
+                            document.querySelectorAll(".qnbutton").forEach((b, idx) => {
+                                if (idx === i) b.classList.add("active");
+                                else b.classList.remove("active");
+                            });
+                        } else {
+                            showQuestion(i + 1);
+                        }
+                    }
+                };
+                grid.appendChild(btn);
+            }
+            updateNavigationState();
+        }
+
+        // Show question by 1-based index (global function for automation)
+        window.showQuestion = function(questionNumber) {
+            if (isMultiLayout) {
+                // In multi layout, render all questions at once in the content-panel
+                const contentPanel = document.querySelector(".content-panel");
+                contentPanel.innerHTML = "";
+                
+                questions.forEach((q, index) => {
+                    const qNum = index + 1;
+                    const card = document.createElement("div");
+                    card.className = "question-card";
+                    card.id = `question-card-${qNum}`;
+                    
+                    const header = document.createElement("div");
+                    header.className = "question-header";
+                    const qnoSpan = document.createElement("span");
+                    qnoSpan.className = "question-number";
+                    qnoSpan.innerText = `Câu hỏi ${qNum} / ${questions.length}`;
+                    header.appendChild(qnoSpan);
+                    card.appendChild(header);
+                    
+                    const qtext = document.createElement("div");
+                    qtext.className = "qtext";
+                    qtext.innerText = `Câu ${qNum}: ${q.text}`;
+                    card.appendChild(qtext);
+                    
+                    const choicesContainer = document.createElement("div");
+                    choicesContainer.className = "choices";
+                    
+                    q.choices.forEach((choice, cIdx) => {
+                        const letter = String.fromCharCode(65 + cIdx);
+                        const item = document.createElement("div");
+                        item.className = "choice-item";
+                        if (userAnswers[index] === cIdx) {
+                            item.classList.add("selected");
+                        }
+                        item.onclick = () => {
+                            userAnswers[index] = cIdx;
+                            // Add answered class to navigation button
+                            const navBtn = document.getElementById(`qnbutton-${qNum}`);
+                            if (navBtn) navBtn.classList.add("answered");
+                            
+                            // Highlight selected choice item in this card
+                            card.querySelectorAll(".choice-item").forEach((ci, ciIdx) => {
+                                if (ciIdx === cIdx) ci.classList.add("selected");
+                                else ci.classList.remove("selected");
+                                
+                                const radio = ci.querySelector('input');
+                                if (radio) radio.checked = (ciIdx === cIdx);
+                            });
+                            
+                            updateNavigationState();
+                        };
+                        
+                        const radio = document.createElement("input");
+                        radio.type = "radio";
+                        radio.name = `q-${index}`;
+                        radio.value = cIdx;
+                        radio.checked = (userAnswers[index] === cIdx);
+                        
+                        const textSpan = document.createElement("span");
+                        textSpan.className = "choice-text";
+                        textSpan.innerText = `${letter}. ${choice}`;
+                        
+                        item.appendChild(radio);
+                        item.appendChild(textSpan);
+                        choicesContainer.appendChild(item);
+                    });
+                    
+                    card.appendChild(choicesContainer);
+                    contentPanel.appendChild(card);
+                });
+                
+                // Add nộp bài button at the end
+                const submitContainer = document.createElement("div");
+                submitContainer.className = "navigation-buttons";
+                submitContainer.style.justifyContent = "center";
+                const submitBtn = document.createElement("button");
+                submitBtn.className = "nav-btn btn-next";
+                submitBtn.innerText = "Nộp bài 🏁";
+                submitBtn.onclick = submitExam;
+                submitContainer.appendChild(submitBtn);
+                contentPanel.appendChild(submitContainer);
+                
+                // Highlight the first navigation button by default
+                document.querySelectorAll(".qnbutton").forEach((btn, idx) => {
+                    if (idx === 0) btn.classList.add("active");
+                    else btn.classList.remove("active");
+                });
+                
+                // Disable prev-btn/next-btn since we render all questions
+                const pBtn = document.getElementById("prev-btn");
+                if (pBtn) pBtn.style.display = "none";
+                const nBtn = document.getElementById("next-btn");
+                if (nBtn) nBtn.style.display = "none";
+                
+                return;
+            }
+
+            const index = questionNumber - 1;
+            if (index < 0 || index >= questions.length) return;
+            currentQuestionIdx = index;
+            
+            // Render active question
+            const q = questions[index];
+            document.getElementById("question-number-lbl").innerText = `Câu hỏi ${questionNumber} / ${questions.length}`;
+            document.getElementById("question-text-lbl").innerText = `Câu ${questionNumber}: ${q.text}`;
+
+            const choicesContainer = document.getElementById("choices-container");
+            choicesContainer.innerHTML = "";
+
+            q.choices.forEach((choice, cIdx) => {
+                const letter = String.fromCharCode(65 + cIdx); // A, B, C, D...
+                
+                const item = document.createElement("div");
+                item.className = "choice-item";
+                if (userAnswers[index] === cIdx) {
+                    item.classList.add("selected");
+                }
+                item.onclick = () => selectChoice(index, cIdx);
+
+                const radio = document.createElement("input");
+                radio.type = "radio";
+                radio.name = `q-${index}`;
+                radio.value = cIdx;
+                radio.checked = (userAnswers[index] === cIdx);
+
+                const textSpan = document.createElement("span");
+                textSpan.className = "choice-text";
+                textSpan.innerText = `${letter}. ${choice}`;
+
+                item.appendChild(radio);
+                item.appendChild(textSpan);
+                choicesContainer.appendChild(item);
+            });
+
+            // Update nav grid selection highlight
+            const buttons = document.querySelectorAll(".qnbutton");
+            buttons.forEach((btn, idx) => {
+                if (idx === index) {
+                    btn.classList.add("active");
+                } else {
+                    btn.classList.remove("active");
+                }
+            });
+
+            // Enable/disable buttons
+            document.getElementById("prev-btn").disabled = (index === 0);
+            const nextBtn = document.getElementById("next-btn");
+            if (index === questions.length - 1) {
+                nextBtn.innerText = "Nộp bài 🏁";
+                nextBtn.className = "nav-btn btn-next";
+            } else {
+                nextBtn.innerText = "Tiếp tục ➡️";
+                nextBtn.className = "nav-btn btn-next";
+            }
+        };
+
+        function selectChoice(questionIndex, choiceIndex) {
+            userAnswers[questionIndex] = choiceIndex;
+            
+            // Add answered class to navigation button
+            const navBtn = document.getElementById(`qnbutton-${questionIndex + 1}`);
+            if (navBtn) {
+                navBtn.classList.add("answered");
+            }
+
+            // Re-render choices to update selected class styling
+            showQuestion(questionIndex + 1);
+            updateNavigationState();
+        }
+
+        function updateNavigationState() {
+            let answeredCount = Object.keys(userAnswers).length;
+            document.getElementById("progress-text").innerText = `${answeredCount}/${questions.length} đã trả lời`;
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIdx > 0) {
+                showQuestion(currentQuestionIdx); // 1-based index is index
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIdx === questions.length - 1) {
+                submitExam();
+            } else {
+                showQuestion(currentQuestionIdx + 2); // next is index + 2
+            }
+        }
+
+        // Start exam & request fullscreen
+        function startExam() {
+            document.documentElement.requestFullscreen()
+                .then(() => {
+                    document.getElementById("cover-screen").style.display = "none";
+                    examActive = true;
+                    showQuestion(1);
+                    startTimer();
+                    setupAntiCheat();
+                })
+                .catch((err) => {
+                    alert("Bạn cần phải cho phép quyền Toàn màn hình để làm bài kiểm tra!");
+                    console.error("Fullscreen request failed", err);
+                });
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                secondsRemaining--;
+                if (secondsRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    submitExam();
+                    return;
+                }
+                const m = Math.floor(secondsRemaining / 60);
+                const s = secondsRemaining % 60;
+                document.getElementById("timer-display").innerText = 
+                    `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        // Security Violation Handler
+        window.handleViolation = function(reason) {
+            if (!examActive) return;
+            violationCount++;
+            document.getElementById("violation-display").innerText = `${violationCount}/3`;
+
+            // Display warnings
+            const dots = document.querySelectorAll(".strike-dot");
+            dots.forEach((dot, idx) => {
+                if (idx < violationCount) {
+                    dot.classList.add("active");
+                }
+            });
+
+            // Open violation popup
+            document.getElementById("warning-desc-text").innerText = 
+                `Phát hiện vi phạm: ${reason}. Bạn đã vi phạm quy chế thi. Lần vi phạm thứ ${violationCount}/3.`;
+            document.getElementById("warning-overlay").classList.add("show");
+            warningOverlayOpen = true;
+
+            if (violationCount >= 3) {
+                alert("Bạn đã vi phạm quy chế thi quá 3 lần. Hệ thống tự động nộp bài!");
+                submitExam();
+            }
+        };
+
+        function resumeExam() {
+            document.documentElement.requestFullscreen()
+                .then(() => {
+                    document.getElementById("warning-overlay").classList.remove("show");
+                    warningOverlayOpen = false;
+                })
+                .catch(() => {
+                    alert("Cần bật lại chế độ toàn màn hình để tiếp tục thi!");
+                });
+        }
+
+        function submitExam() {
+            examActive = false;
+            clearInterval(timerInterval);
+            document.getElementById("warning-overlay").classList.remove("show");
+            
+            // Exit fullscreen if active
+            if (document.fullscreenElement) {
+                document.exitFullscreen().catch(() => {});
+            }
+
+            // Show success screen
+            document.getElementById("success-screen").classList.add("show");
+        }
+
+        // Setup Anti-Cheat event listeners
+        function setupAntiCheat() {
+            // 1. Detect focus loss (tab switch / alt-tab)
+            window.addEventListener('blur', () => {
+                if (examActive && !warningOverlayOpen) {
+                    handleViolation("Rời khỏi trang thi (Tab blur / Switch window)");
+                }
+            });
+
+            // 2. Detect fullscreen exit
+            document.addEventListener('fullscreenchange', () => {
+                if (!document.fullscreenElement && examActive && !warningOverlayOpen) {
+                    handleViolation("Thoát khỏi chế độ toàn màn hình");
+                }
+            });
+
+            // 3. Block Context Menu (right click)
+            document.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                handleViolation("Nhấn chuột phải (Context menu)");
+            });
+
+            // 4. Block F12, Ctrl+Shift+I, Ctrl+Shift+C, Ctrl+U, Ctrl+S
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'C' || e.key === 'c' || e.key === 'J' || e.key === 'j')) ||
+                    (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's' || e.key === 'P' || e.key === 'p'))
+                ) {
+                    e.preventDefault();
+                    handleViolation(`Sử dụng tổ hợp phím tắt cấm (${e.key})`);
+                }
+            });
+        }
+
+        // Run initialization
+        init();
+    </script>
+</body>
+</html>

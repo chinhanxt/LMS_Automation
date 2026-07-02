@@ -1,0 +1,11 @@
+.venv/
+.omc/
+.kilocode/
+__pycache__/
+*.pyc
+chrome_profile/
+*.log
+keyAI.md
+answers.json
+config_speed.json
+config_ui.json
