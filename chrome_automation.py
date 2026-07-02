@@ -509,7 +509,7 @@ class ChromeAutomation:
             });
 
             let questionContainers = allPotential.filter(el => {
-                if (el.closest('.navigation-panel, .sidebar, .question-nav, .quiz-nav, nav, .pagination, [class*="nav-panel"], [class*="sidebar"], [class*="nav-grid"], [id*="nav-grid"], [class*="question-grid"], [id*="navigation"], [class*="sidebar"], [class*="qn-container"], [class*="qnbuttons"]')) {
+                if (el.closest('.navigation-panel, .sidebar, .question-nav, .quiz-nav, nav, .pagination, [class*="nav-panel"], [class*="sidebar"], [class*="nav-grid"], [id*="nav-grid"], [class*="question-grid"], [id*="navigation"], [class*="sidebar"], [class*="qn-container"], [class*="qnbuttons"], [class*="quiz-nav"], [class*="nav-block"]')) {
                     return false;
                 }
                 let opts = getOptions(el);
@@ -519,7 +519,7 @@ class ChromeAutomation:
             if (questionContainers.length === 0) {
                 let fallbacks = document.querySelectorAll('div, section, fieldset, form, tr, li');
                 questionContainers = Array.from(fallbacks).filter(el => {
-                    if (el.closest('.navigation-panel, .sidebar, .question-nav, .quiz-nav, nav, .pagination, [class*="nav-panel"], [class*="sidebar"], [class*="nav-grid"], [id*="nav-grid"], [class*="question-grid"], [id*="navigation"], [class*="sidebar"], [class*="qn-container"], [class*="qnbuttons"]')) {
+                    if (el.closest('.navigation-panel, .sidebar, .question-nav, .quiz-nav, nav, .pagination, [class*="nav-panel"], [class*="sidebar"], [class*="nav-grid"], [id*="nav-grid"], [class*="question-grid"], [id*="navigation"], [class*="sidebar"], [class*="qn-container"], [class*="qnbuttons"], [class*="quiz-nav"], [class*="nav-block"]')) {
                         return false;
                     }
                     let opts = getOptions(el);
@@ -534,7 +534,7 @@ class ChromeAutomation:
             if (questionContainers.length === 0) {
                 let fallbacks = document.querySelectorAll('div, section, fieldset, form, tr, td');
                 questionContainers = Array.from(fallbacks).filter(el => {
-                    if (el.closest('.navigation-panel, .sidebar, .question-nav, .quiz-nav, nav, .pagination, [class*="nav-panel"], [class*="sidebar"], [class*="nav-grid"], [id*="nav-grid"], [class*="question-grid"], [id*="navigation"], [class*="sidebar"], [class*="qn-container"], [class*="qnbuttons"]')) {
+                    if (el.closest('.navigation-panel, .sidebar, .question-nav, .quiz-nav, nav, .pagination, [class*="nav-panel"], [class*="sidebar"], [class*="nav-grid"], [id*="nav-grid"], [class*="question-grid"], [id*="navigation"], [class*="sidebar"], [class*="qn-container"], [class*="qnbuttons"], [class*="quiz-nav"], [class*="nav-block"]')) {
                         return false;
                     }
                     let opts = getOptions(el);
@@ -1301,7 +1301,7 @@ class ChromeAutomation:
             });
 
             let questionContainers = allPotential.filter(el => {
-                if (el.closest('.navigation-panel, .sidebar, .question-nav, .quiz-nav, nav, .pagination, [class*="nav-panel"], [class*="sidebar"], [class*="nav-grid"], [id*="nav-grid"], [class*="question-grid"], [id*="navigation"], [class*="sidebar"], [class*="qn-container"], [class*="qnbuttons"]')) {
+                if (el.closest('.navigation-panel, .sidebar, .question-nav, .quiz-nav, nav, .pagination, [class*="nav-panel"], [class*="sidebar"], [class*="nav-grid"], [id*="nav-grid"], [class*="question-grid"], [id*="navigation"], [class*="sidebar"], [class*="qn-container"], [class*="qnbuttons"], [class*="quiz-nav"], [class*="nav-block"]')) {
                     return false;
                 }
                 let opts = getOptions(el);
@@ -1311,7 +1311,7 @@ class ChromeAutomation:
             if (questionContainers.length === 0) {
                 let fallbacks = document.querySelectorAll('div, section, fieldset, form, tr, li');
                 questionContainers = Array.from(fallbacks).filter(el => {
-                    if (el.closest('.navigation-panel, .sidebar, .question-nav, .quiz-nav, nav, .pagination, [class*="nav-panel"], [class*="sidebar"], [class*="nav-grid"], [id*="nav-grid"], [class*="question-grid"], [id*="navigation"], [class*="sidebar"], [class*="qn-container"], [class*="qnbuttons"]')) {
+                    if (el.closest('.navigation-panel, .sidebar, .question-nav, .quiz-nav, nav, .pagination, [class*="nav-panel"], [class*="sidebar"], [class*="nav-grid"], [id*="nav-grid"], [class*="question-grid"], [id*="navigation"], [class*="sidebar"], [class*="qn-container"], [class*="qnbuttons"], [class*="quiz-nav"], [class*="nav-block"]')) {
                         return false;
                     }
                     let opts = getOptions(el);
@@ -1326,7 +1326,7 @@ class ChromeAutomation:
             if (questionContainers.length === 0) {
                 let fallbacks = document.querySelectorAll('div, section, fieldset, form, tr, td');
                 questionContainers = Array.from(fallbacks).filter(el => {
-                    if (el.closest('.navigation-panel, .sidebar, .question-nav, .quiz-nav, nav, .pagination, [class*="nav-panel"], [class*="sidebar"], [class*="nav-grid"], [id*="nav-grid"], [class*="question-grid"], [id*="navigation"], [class*="sidebar"], [class*="qn-container"], [class*="qnbuttons"]')) {
+                    if (el.closest('.navigation-panel, .sidebar, .question-nav, .quiz-nav, nav, .pagination, [class*="nav-panel"], [class*="sidebar"], [class*="nav-grid"], [id*="nav-grid"], [class*="question-grid"], [id*="navigation"], [class*="sidebar"], [class*="qn-container"], [class*="qnbuttons"], [class*="quiz-nav"], [class*="nav-block"]')) {
                         return false;
                     }
                     let opts = getOptions(el);
