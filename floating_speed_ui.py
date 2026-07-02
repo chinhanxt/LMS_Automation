@@ -1000,9 +1000,13 @@ class FloatingSpeedApp(QWidget):
         """)
         self.compact_container.hide()
 
-        compact_layout = QHBoxLayout(self.compact_container)
-        compact_layout.setContentsMargins(8, 4, 8, 4)
-        compact_layout.setSpacing(6)
+        compact_main_layout = QVBoxLayout(self.compact_container)
+        compact_main_layout.setContentsMargins(10, 8, 10, 8)
+        compact_main_layout.setSpacing(6)
+
+        compact_header_layout = QHBoxLayout()
+        compact_header_layout.setContentsMargins(0, 0, 0, 0)
+        compact_header_layout.setSpacing(6)
 
         self.compact_restore_btn = QPushButton("👁️", self.compact_container)
         self.compact_restore_btn.setToolTip("Mở lại bảng điều khiển đầy đủ")
@@ -1022,12 +1026,12 @@ class FloatingSpeedApp(QWidget):
             }
         """)
         self.compact_restore_btn.clicked.connect(self.toggle_compact_mode)
-        compact_layout.addWidget(self.compact_restore_btn)
+        compact_header_layout.addWidget(self.compact_restore_btn)
 
         self.compact_dot_lbl = QLabel("🟢", self.compact_container)
         self.compact_dot_lbl.setFixedWidth(18)
         self.compact_dot_lbl.setAlignment(Qt.AlignCenter)
-        compact_layout.addWidget(self.compact_dot_lbl)
+        compact_header_layout.addWidget(self.compact_dot_lbl)
 
         self.compact_status_lbl = QLabel("Hệ thống sẵn sàng...", self.compact_container)
         self.compact_status_lbl.setStyleSheet("""
@@ -1037,8 +1041,8 @@ class FloatingSpeedApp(QWidget):
                 font-weight: bold;
             }
         """)
-        compact_layout.addWidget(self.compact_status_lbl)
-        compact_layout.addStretch()
+        compact_header_layout.addWidget(self.compact_status_lbl)
+        compact_header_layout.addStretch()
 
         self.compact_close_btn = QPushButton("❌", self.compact_container)
         self.compact_close_btn.setFixedSize(20, 20)
@@ -1056,7 +1060,25 @@ class FloatingSpeedApp(QWidget):
             }
         """)
         self.compact_close_btn.clicked.connect(self.close)
-        compact_layout.addWidget(self.compact_close_btn)
+        compact_header_layout.addWidget(self.compact_close_btn)
+
+        compact_main_layout.addLayout(compact_header_layout)
+
+        # AI Quiz log console in Compact mode
+        self.compact_quiz_console = QPlainTextEdit(self.compact_container)
+        self.compact_quiz_console.setReadOnly(True)
+        self.compact_quiz_console.setPlaceholderText("Nhật ký trắc nghiệm AI sẽ hiển thị ở đây...")
+        self.compact_quiz_console.setStyleSheet("""
+            QPlainTextEdit {
+                background-color: #f8fafc;
+                color: #7c3aed;
+                border: 1px solid #cbd5e1;
+                border-radius: 6px;
+                font-family: 'Consolas', 'Monaco', monospace;
+                font-size: 9px;
+            }
+        """)
+        compact_main_layout.addWidget(self.compact_quiz_console, stretch=1)
 
         self.compact_timer = QTimer(self)
         self.compact_timer.timeout.connect(self.animate_compact_mode)
@@ -1494,6 +1516,9 @@ class FloatingSpeedApp(QWidget):
             self.video_console.appendHtml(html_msg)
         elif category == "quiz":
             self.quiz_console.appendHtml(html_msg)
+            if hasattr(self, "compact_quiz_console"):
+                self.compact_quiz_console.appendHtml(html_msg)
+                self.compact_quiz_console.ensureCursorVisible()
 
     def open_api_settings(self):
         current_keys = self.client.api_keys
@@ -1790,7 +1815,7 @@ class FloatingSpeedApp(QWidget):
             self.compact_container.show()
             self.setMinimumSize(0, 0)
             self.setMaximumSize(16777215, 16777215)
-            self.setFixedSize(350, 65)
+            self.setFixedSize(450, 220)
             self.compact_timer.start(400)
         else:
             self.compact_container.hide()
