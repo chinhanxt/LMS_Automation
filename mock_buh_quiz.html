@@ -3,423 +3,438 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BUH LMS - Cổng thi trực tuyến - Đại học Ngân hàng TP.HCM</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>E-Learning LMS - BUH Online Quiz Mockup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --buh-blue: #002f6c;
-            --buh-blue-light: #e6f0fa;
-            --buh-red: #a61d24;
-            --buh-gold: #d4af37;
-            --bg-body: #f4f6f9;
-            --bg-card: #ffffff;
-            --text-main: #0a2240;
-            --text-muted: #64748b;
-            --border-color: #cbd5e1;
-            --success: #15803d;
-            --warning: #b45309;
-            --danger: #b91c1c;
+            --lms-blue: #0070ba;
+            --lms-dark-blue: #005fa2;
+            --lms-bg-gray: #f8f9fa;
+            --lms-border: #dee2e6;
+            --question-red: #ba2121;
+            --question-bg-blue: #f4f8fb;
+            --question-border-blue: #c8e0f1;
+            --text-dark: #333333;
+            --text-muted: #6c757d;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
 
         body {
-            background-color: var(--bg-body);
-            color: var(--text-main);
+            background-color: #ffffff;
+            color: var(--text-dark);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             user-select: none;
         }
 
-        /* Header phong cách BUH */
+        /* Top Navigation Header */
         header {
-            background: linear-gradient(90deg, var(--buh-blue) 0%, #001a3e 100%);
+            background-color: var(--lms-blue);
             color: #ffffff;
-            padding: 0.8rem 2rem;
-            border-bottom: 4px solid var(--buh-gold);
+            height: 50px;
+            padding: 0 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-            z-index: 10;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+            z-index: 100;
         }
 
-        .header-logo-container {
+        .header-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 20px;
         }
 
-        /* Vẽ biểu tượng BUH giả lập */
-        .buh-emblem {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: #ffffff;
-            border: 2px solid var(--buh-gold);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            color: var(--buh-blue);
-            font-size: 1.1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        .header-close-btn {
+            font-size: 24px;
+            color: #ffffff;
+            cursor: pointer;
+            font-weight: 300;
         }
 
-        .header-title h1 {
-            font-size: 1.1rem;
-            font-weight: 700;
+        .header-logo-title {
+            font-size: 15px;
+            font-weight: 500;
             letter-spacing: 0.5px;
             text-transform: uppercase;
         }
 
-        .header-title p {
-            font-size: 0.75rem;
-            color: #93c5fd;
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-icon {
+            font-size: 18px;
+            color: #ffffff;
+            cursor: pointer;
+            opacity: 0.9;
+        }
+
+        .header-icon:hover {
+            opacity: 1;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .user-name {
+            font-size: 13px;
             font-weight: 500;
-        }
-
-        .header-meta {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-size: 0.85rem;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            font-weight: 600;
-        }
-
-        .meta-item.timer {
-            background: rgba(166, 29, 36, 0.2);
-            border-color: rgba(166, 29, 36, 0.3);
-            color: #fecaca;
-        }
-
-        .meta-item.violation {
-            background: rgba(212, 175, 55, 0.2);
-            border-color: rgba(212, 175, 55, 0.3);
-            color: #fef08a;
-        }
-
-        /* Màn hình bắt đầu */
-        #cover-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #001229;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            padding: 2rem;
-        }
-
-        .cover-card {
-            background: var(--bg-card);
-            color: var(--text-main);
-            padding: 3rem;
-            border-radius: 16px;
-            max-width: 650px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.35);
-            border-top: 6px solid var(--buh-blue);
-            text-align: center;
-        }
-
-        .cover-card h2 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: var(--buh-blue);
-            margin-bottom: 0.5rem;
-        }
-
-        .cover-card h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--buh-red);
-            margin-bottom: 1.5rem;
             letter-spacing: 0.5px;
         }
 
-        .rules-list {
-            text-align: left;
-            margin: 1.5rem 0;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            line-height: 1.6;
-            background: var(--buh-blue-light);
-            padding: 1.2rem 1.5rem 1.2rem 2.2rem;
-            border-radius: 8px;
-            border-left: 4px solid var(--buh-blue);
-        }
-
-        .rules-list li {
-            margin-bottom: 0.5rem;
-        }
-
-        .start-btn {
-            background: var(--buh-blue);
-            color: white;
-            border: none;
-            padding: 0.8rem 2.5rem;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 6px rgba(0, 47, 108, 0.25);
-        }
-
-        .start-btn:hover {
-            background: #001f4c;
-            transform: translateY(-1px);
-        }
-
-        /* Layout Làm Bài */
-        .workspace {
-            display: grid;
-            grid-template-columns: 260px 1fr;
-            gap: 1.5rem;
-            max-width: 1300px;
-            margin: 1.5rem auto;
-            padding: 0 1.5rem;
-            flex-grow: 1;
-            width: 100%;
-        }
-
-        /* Khối Navigation bên trái */
-        .navigation-panel {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.2rem;
-            align-self: start;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
-        }
-
-        .panel-title {
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: var(--buh-blue);
-            margin-bottom: 1rem;
-            border-bottom: 2px solid var(--buh-blue-light);
-            padding-bottom: 0.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .question-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0.5rem;
-        }
-
-        .qnbutton, .nav-item {
-            aspect-ratio: 1;
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            border: 2px solid rgba(255,255,255,0.8);
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #f1f5f9;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: all 0.15s ease;
-            text-decoration: none;
+            color: #495057;
+            font-weight: bold;
+            font-size: 12px;
         }
 
-        .qnbutton:hover, .nav-item:hover {
-            background: #cbd5e1;
-            color: var(--text-main);
-        }
-
-        .qnbutton.active, .nav-item.active {
-            background: var(--buh-blue);
-            color: white;
-            border-color: var(--buh-blue);
-        }
-
-        .qnbutton.answered, .nav-item.answered {
-            background: var(--buh-blue-light);
-            color: var(--buh-blue);
-            border-color: #adcde7;
-        }
-
-        /* Khối Nội Dung câu hỏi */
-        .content-panel {
+        /* Sub-Header / Meta Info */
+        .sub-header {
+            background-color: var(--lms-bg-gray);
+            border-bottom: 1px solid var(--lms-border);
+            padding: 8px 1.5rem;
             display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-        }
-
-        .question-card, .que, .question {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.8rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
-        }
-
-        .question-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1.2rem;
-            border-bottom: 1px solid var(--buh-blue-light);
-            padding-bottom: 0.5rem;
-        }
-
-        .question-number {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--buh-blue);
-        }
-
-        .qtext, .question-text {
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: var(--text-main);
-            line-height: 1.5;
-            margin-bottom: 1.5rem;
-        }
-
-        .choices, .options, .answers {
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-        }
-
-        .choice-item, .quiz-choice-item {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            padding: 0.8rem 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.15s ease;
-            background-color: #f8fafc;
-        }
-
-        .choice-item:hover, .quiz-choice-item:hover {
-            background-color: var(--buh-blue-light);
-            border-color: #abcce9;
-        }
-
-        .choice-item.selected, .quiz-choice-item.selected {
-            background-color: #dbeafe;
-            border-color: var(--buh-blue);
-        }
-
-        .choice-item input[type="radio"], .quiz-choice-item input[type="radio"] {
-            appearance: none;
-            width: 18px;
-            height: 18px;
-            border: 2px solid var(--text-muted);
-            border-radius: 50%;
-            outline: none;
-            position: relative;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-
-        .choice-item input[type="radio"]:checked, .quiz-choice-item input[type="radio"]:checked {
-            border-color: var(--buh-blue);
-            background-color: var(--buh-blue);
-        }
-
-        .choice-item input[type="radio"]:checked::after, .quiz-choice-item input[type="radio"]:checked::after {
-            content: "";
-            position: absolute;
-            top: 4px;
-            left: 4px;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: white;
-        }
-
-        .choice-text {
-            font-size: 0.95rem;
-            color: var(--text-main);
+            justify-content: flex-end;
+            gap: 15px;
+            font-size: 13px;
             font-weight: 500;
         }
 
-        /* Các nút điều hướng */
+        .meta-timer {
+            color: #dc3545;
+            background-color: #f8d7da;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid #f5c6cb;
+        }
+
+        .meta-violation {
+            color: #856404;
+            background-color: #fff3cd;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid #ffeeba;
+        }
+
+        /* Layout Workspace */
+        .workspace {
+            display: flex;
+            flex: 1;
+            width: 100%;
+        }
+
+        /* Left Sidebar Drawer */
+        .sidebar {
+            width: 240px;
+            background-color: var(--lms-bg-gray);
+            border-right: 1px solid var(--lms-border);
+            padding: 15px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            font-size: 13px;
+            color: #495057;
+            cursor: pointer;
+            text-decoration: none;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar-item:hover {
+            background-color: #e9ecef;
+            color: #212529;
+        }
+
+        .sidebar-item.active {
+            background-color: #e7f1f9;
+            color: var(--lms-blue);
+            border-left-color: var(--lms-blue);
+            font-weight: 500;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background-color: var(--lms-border);
+            margin: 10px 0;
+        }
+
+        .sidebar-section-title {
+            padding: 5px 20px;
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Main Content Panel */
+        .content-area {
+            flex: 1;
+            padding: 20px 30px;
+            overflow-y: auto;
+            background-color: #ffffff;
+        }
+
+        /* Moodle Question (.que) Container */
+        .que {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+
+        /* Left Info Column */
+        .que .info {
+            width: 130px;
+            background-color: var(--lms-bg-gray);
+            border: 1px solid var(--lms-border);
+            border-radius: 4px;
+            padding: 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+            height: fit-content;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .que .info .no {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--question-red);
+            margin-bottom: 4px;
+        }
+
+        .que .info .state {
+            color: var(--text-dark);
+        }
+
+        .que .info .grade {
+            font-size: 11px;
+        }
+
+        .que .info .flag {
+            margin-top: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .que .info .flag:hover {
+            color: var(--text-dark);
+        }
+
+        /* Right Content Column */
+        .que .content {
+            flex: 1;
+            background-color: var(--question-bg-blue);
+            border: 1px solid var(--question-border-blue);
+            border-radius: 4px;
+            padding: 20px;
+        }
+
+        .que .content .qtext {
+            font-size: 14.5px;
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-weight: normal;
+        }
+
+        .que .content .ablock {
+            margin-bottom: 15px;
+        }
+
+        .que .content .ablock .prompt {
+            font-size: 12.5px;
+            font-style: italic;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .que .content .ablock .answer {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* Option Item Layout */
+        .choice-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .choice-item input[type="radio"] {
+            margin-top: 3px;
+            cursor: pointer;
+        }
+
+        .choice-item label {
+            font-size: 13.5px;
+            color: var(--text-dark);
+            line-height: 1.5;
+            cursor: pointer;
+            display: flex;
+            gap: 4px;
+        }
+
+        .choice-item label .anumber {
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+
+        .clear-choice {
+            font-size: 12px;
+            color: var(--lms-blue);
+            cursor: pointer;
+            text-decoration: underline;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .clear-choice:hover {
+            color: var(--lms-dark-blue);
+        }
+
+        /* Bottom Controls / Pagination Buttons */
         .navigation-buttons {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 0.5rem;
+            border-top: 1px solid var(--lms-border);
+            padding-top: 20px;
+            margin-top: 10px;
         }
 
         .nav-btn {
-            background: #e2e8f0;
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-            padding: 0.6rem 1.5rem;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-weight: 600;
+            background-color: var(--lms-blue);
+            color: white;
+            border: 1px solid var(--lms-blue);
+            padding: 8px 18px;
+            border-radius: 4px;
+            font-size: 13.5px;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.15s ease;
+            transition: background-color 0.15s;
         }
 
         .nav-btn:hover:not(:disabled) {
-            background: #cbd5e1;
+            background-color: var(--lms-dark-blue);
         }
 
         .nav-btn:disabled {
-            opacity: 0.5;
+            background-color: #e9ecef;
+            border-color: #dee2e6;
+            color: #adb5bd;
             cursor: not-allowed;
         }
 
-        .nav-btn.btn-next {
-            background: var(--buh-blue);
-            color: white;
-            border-color: var(--buh-blue);
+        /* Quiz Navigation Grid (Mini display on Right or Bottom) */
+        .quiz-nav-block {
+            width: 220px;
+            border-left: 1px solid var(--lms-border);
+            background-color: var(--lms-bg-gray);
+            padding: 15px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
-        .nav-btn.btn-next:hover:not(:disabled) {
-            background: #001f4c;
+        .quiz-nav-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #495057;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--lms-border);
+            padding-bottom: 8px;
         }
 
-        /* Warning Overlays & Popups */
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+        }
+
+        .qnbutton {
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+            border: 1px solid var(--lms-border);
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #495057;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.15s;
+        }
+
+        .qnbutton:hover {
+            background-color: #e9ecef;
+        }
+
+        .qnbutton.active {
+            border: 2px solid var(--lms-blue);
+            font-weight: bold;
+        }
+
+        .qnbutton.answered {
+            background-color: #ced4da;
+            color: #212529;
+        }
+
+        /* Warning Violations overlays */
         #warning-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 18, 41, 0.85);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 99999;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3s;
         }
 
         #warning-overlay.show {
@@ -429,37 +444,37 @@
 
         .warning-card {
             background: white;
-            border-radius: 12px;
+            border-radius: 8px;
             padding: 2.5rem;
             max-width: 480px;
             width: 90%;
             text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            border: 3px solid var(--buh-red);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            border-top: 4px solid var(--question-red);
             animation: shake 0.4s ease-in-out;
         }
 
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
         }
 
         .warning-icon {
-            font-size: 3rem;
-            color: var(--buh-red);
-            margin-bottom: 0.8rem;
+            font-size: 2.5rem;
+            color: var(--question-red);
+            margin-bottom: 0.5rem;
         }
 
         .warning-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--buh-red);
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--question-red);
             margin-bottom: 0.5rem;
         }
 
         .warning-desc {
-            font-size: 0.9rem;
+            font-size: 13.5px;
             color: var(--text-muted);
             margin-bottom: 1.5rem;
             line-height: 1.5;
@@ -469,41 +484,39 @@
             display: flex;
             justify-content: center;
             gap: 0.5rem;
-            margin: 1.2rem 0;
+            margin: 1rem 0;
         }
 
         .strike-dot {
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            background: #e2e8f0;
-            border: 1px solid var(--border-color);
+            background: #e9ecef;
+            border: 1px solid var(--lms-border);
         }
 
         .strike-dot.active {
-            background: var(--buh-red);
-            border-color: var(--buh-red);
+            background: var(--question-red);
+            border-color: var(--question-red);
         }
 
         .warn-btn {
             width: 100%;
-            padding: 0.7rem;
-            border-radius: 6px;
-            font-weight: 600;
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: 500;
             border: none;
             cursor: pointer;
-            margin-bottom: 0.5rem;
-        }
-
-        .warn-btn.resume {
-            background: var(--buh-blue);
+            background-color: var(--lms-blue);
             color: white;
+            font-size: 13.5px;
         }
 
-        .warn-btn.resume:hover {
-            background: #001f4c;
+        .warn-btn:hover {
+            background-color: var(--lms-dark-blue);
         }
 
+        /* Success screen */
         #success-screen {
             position: fixed;
             top: 0;
@@ -519,7 +532,7 @@
             text-align: center;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.4s ease;
+            transition: opacity 0.4s;
         }
 
         #success-screen.show {
@@ -529,83 +542,194 @@
 
         .success-icon {
             font-size: 4rem;
-            color: var(--success);
+            color: #28a745;
             margin-bottom: 1rem;
+        }
+
+        /* Cover Screen before Quiz */
+        #cover-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #e9ecef;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 2rem;
+        }
+
+        .cover-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            border-top: 5px solid var(--lms-blue);
+        }
+
+        .cover-card h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--lms-blue);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .cover-card h3 {
+            font-size: 1.15rem;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .rules-box {
+            text-align: left;
+            background-color: var(--lms-bg-gray);
+            border: 1px solid var(--lms-border);
+            border-radius: 4px;
+            padding: 15px 20px 15px 30px;
+            margin-bottom: 2rem;
+            font-size: 13.5px;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .rules-box li {
+            margin-bottom: 6px;
+        }
+
+        .start-btn {
+            background-color: var(--lms-blue);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 4px;
+            font-size: 14.5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.15s;
+        }
+
+        .start-btn:hover {
+            background-color: var(--lms-dark-blue);
         }
     </style>
 </head>
 <body>
 
-    <!-- Cover screen trước khi thi -->
+    <!-- Cover Page before start attempt -->
     <div id="cover-screen">
         <div class="cover-card">
-            <div class="buh-emblem" style="margin: 0 auto 1rem auto;">BUH</div>
-            <h2>TRƯỜNG ĐẠI HỌC NGÂN HÀNG TP. HỒ CHÍ MINH</h2>
-            <h3>HỆ THỐNG THI TRỰC TUYẾN - BUH LMS</h3>
-            <p style="font-weight: 700; color: var(--buh-blue);">BÀI KIỂM TRA MẪU: KINH TẾ TIỀN TỆ & TÀI CHÍNH</p>
-            
-            <ul class="rules-list">
-                <li>Yêu cầu duy trì chế độ Toàn màn hình trong suốt thời gian làm bài.</li>
-                <li>Mọi hành động rời trang, chuyển tab sẽ bị hệ thống phát hiện.</li>
-                <li>Cảnh báo quá 3 lần, bài thi sẽ tự động kết thúc và nộp điểm hiện tại.</li>
-            </ul>
+            <h2>TRƯỜNG ĐẠI HỌC NGÂN HÀNG TP. HCM</h2>
+            <h3>Cổng ôn thi trắc nghiệm trực tuyến LMS</h3>
+            <div class="rules-box">
+                <p style="font-weight: bold; margin-bottom: 8px; color: var(--lms-blue);">NỘI QUY PHÒNG THI:</p>
+                <ul>
+                    <li>Thí sinh phải bật chế độ toàn màn hình khi làm bài thi.</li>
+                    <li>Nghiêm cấm hành vi rời khỏi màn hình thi hoặc chuyển tab.</li>
+                    <li>Nếu vi phạm quá 3 lần, bài thi sẽ tự động được thu hồi và nộp điểm.</li>
+                </ul>
+            </div>
             <button class="start-btn" onclick="startExam()">Bắt đầu làm bài</button>
         </div>
     </div>
 
-    <!-- Header bar -->
+    <!-- Header bar Moodle-style -->
     <header>
-        <div class="header-logo-container">
-            <div class="buh-emblem">BUH</div>
-            <div class="header-title">
-                <h1>Đại học Ngân hàng TP.HCM</h1>
-                <p>BUH LMS Online Testing System Sandbox</p>
-            </div>
+        <div class="header-left">
+            <div class="header-close-btn" onclick="location.reload()">×</div>
+            <div class="header-logo-title">LMS BUH - KINH TẾ TIỀN TỆ & TÀI CHÍNH</div>
         </div>
-        <div class="header-meta">
-            <div class="meta-item timer">
-                ⏱️ Còn lại: <span id="timer-display">45:00</span>
-            </div>
-            <div class="meta-item violation">
-                ⚠️ Vi phạm: <span id="violation-display">0/3</span>
+        <div class="header-right">
+            <div class="header-icon">🔔</div>
+            <div class="header-icon">💬</div>
+            <div class="user-profile">
+                <div class="user-name">SINH VIEN</div>
+                <div class="user-avatar">SV</div>
             </div>
         </div>
     </header>
 
-    <!-- Khu vực chính -->
+    <!-- Sub-Header for Exam Controls -->
+    <div class="sub-header">
+        <div style="margin-right: auto; font-weight: bold; display: flex; align-items: center; gap: 5px; color: var(--lms-blue);">
+            📝 Tiến trình: <span id="progress-text">0/20 câu</span>
+        </div>
+        <div class="meta-timer">
+            ⏱️ Thời gian còn lại: <span id="timer-display">45:00</span>
+        </div>
+        <div class="meta-violation">
+            ⚠️ Số lần vi phạm: <span id="violation-display">0/3</span>
+        </div>
+    </div>
+
+    <!-- Main Workspace with Sidebar & Content -->
     <div class="workspace">
-        <!-- Grid câu hỏi bên trái -->
-        <div class="navigation-panel">
-            <div class="panel-title">
-                <span>Danh sách câu</span>
-                <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: normal;" id="progress-text">0/20 câu</span>
+        <!-- Sidebar Navigation Drawer -->
+        <div class="sidebar">
+            <div class="sidebar-item active">
+                <span>🎓 KHÓA HỌC MẪU</span>
             </div>
-            <div class="question-grid" id="navigation-grid"></div>
+            <div class="sidebar-item">
+                <span>👥 Danh sách thành viên</span>
+            </div>
+            <div class="sidebar-item">
+                <span>🏅 Các huy hiệu</span>
+            </div>
+            <div class="sidebar-item">
+                <span>☑️ Năng lực</span>
+            </div>
+            <div class="sidebar-item">
+                <span>📊 Điểm số</span>
+            </div>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-section-title">Thông tin khóa học</div>
+            <div class="sidebar-item">
+                <span>📂 THÔNG TIN KHÓA HỌC</span>
+            </div>
+            <div class="sidebar-item">
+                <span>📂 THÔNG BÁO CỦA KHÓA HỌC</span>
+            </div>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-section-title">Chương trình học</div>
+            <div class="sidebar-item">
+                <span>📂 PHẦN 1: ĐỊNH DẠNG VB NÂNG CAO</span>
+            </div>
+            <div class="sidebar-item">
+                <span>📂 PHẦN 2: MỘT SỐ CHỨC NĂNG NC</span>
+            </div>
+            <div class="sidebar-item">
+                <span>📂 PHẦN 3: BÀI TẬP BẮT BUỘC</span>
+            </div>
         </div>
 
-        <!-- Câu hỏi chủ đạo -->
-        <div class="content-panel">
-            <div class="question-card" id="question-container">
-                <div class="question-header">
-                    <span class="question-number" id="question-number-lbl">Đang chuẩn bị câu hỏi...</span>
-                </div>
-                <div class="qtext" id="question-text-lbl"></div>
-                <div class="choices" id="choices-container"></div>
+        <!-- Center content area containing Moodle question cards -->
+        <div class="content-area">
+            <div class="content-panel" id="questions-list-panel">
+                <!-- Question cards (.que) will be loaded here by JS -->
             </div>
 
-            <!-- Các nút bấm điều hướng bên dưới -->
+            <!-- Bottom navigations -->
             <div class="navigation-buttons">
-                <button class="nav-btn btn-prev" onclick="prevQuestion()" id="prev-btn">
-                    Quay lại
-                </button>
-                <button class="nav-btn btn-next" onclick="nextQuestion()" id="next-btn">
-                    Tiếp tục
-                </button>
+                <button class="nav-btn" onclick="prevQuestion()" id="prev-btn">Quay lại</button>
+                <button class="nav-btn" onclick="nextQuestion()" id="next-btn">Tiếp tục</button>
+            </div>
+        </div>
+
+        <!-- Moodle Right Sidebar Quiz Navigation Grid -->
+        <div class="quiz-nav-block">
+            <div class="quiz-nav-title">Quiz navigation</div>
+            <div class="question-grid" id="navigation-grid">
+                <!-- Numbers generated dynamically -->
             </div>
         </div>
     </div>
 
-    <!-- Popup Cảnh Báo Vi Phạm -->
+    <!-- Security Warning Overlay Popup -->
     <div id="warning-overlay">
         <div class="warning-card">
             <div class="warning-icon">⚠️</div>
@@ -616,15 +740,15 @@
                 <div class="strike-dot"></div>
                 <div class="strike-dot"></div>
             </div>
-            <button class="warn-btn resume" onclick="resumeExam()">Tiếp tục làm bài (Bật Fullscreen)</button>
+            <button class="warn-btn" onclick="resumeExam()">Trở lại phòng thi (Fullscreen)</button>
         </div>
     </div>
 
-    <!-- Màn hình hoàn tất -->
+    <!-- Submit Successful view screen -->
     <div id="success-screen">
         <div class="success-icon">🎉</div>
         <h2>Nộp bài thành công!</h2>
-        <p style="color: var(--text-muted); margin: 0.5rem 0 1.5rem 0;">Hệ thống BUH LMS đã ghi nhận kết quả bài thi thử của bạn.</p>
+        <p style="color: var(--text-muted); margin: 8px 0 20px 0;">Kết quả thi trắc nghiệm đã được cập nhật thành công trên hệ thống BUH LMS.</p>
         <button class="start-btn" onclick="location.reload()">Thực hiện lại</button>
     </div>
 
@@ -741,7 +865,7 @@
                 correct: 1
             },
             {
-                text: "Tỷ giá hối đoái thả nổi hoàn toàn được quyết định bởi:",
+                text: "Tỷ gia hối đoái thả nổi hoàn toàn được quyết định bởi:",
                 choices: [
                     "Quyết định hành chính của Ngân hàng Trung ương",
                     "Quy luật cung cầu ngoại tệ trên thị trường tự do",
@@ -837,7 +961,7 @@
         let violationCount = 0;
         let warningOverlayOpen = false;
         let examActive = false;
-        let secondsRemaining = 45 * 60; // 45 minutes
+        let secondsRemaining = 45 * 60;
         let timerInterval;
 
         const isMultiLayout = new URLSearchParams(window.location.search).get('layout') === 'multi';
@@ -870,91 +994,23 @@
         }
 
         window.showQuestion = function(questionNumber) {
+            const panel = document.getElementById("questions-list-panel");
+            panel.innerHTML = "";
+
             if (isMultiLayout) {
-                const contentPanel = document.querySelector(".content-panel");
-                contentPanel.innerHTML = "";
-                
                 questions.forEach((q, index) => {
                     const qNum = index + 1;
-                    const card = document.createElement("div");
-                    card.className = "question-card";
-                    card.id = `question-card-${qNum}`;
-                    
-                    const header = document.createElement("div");
-                    header.className = "question-header";
-                    const qnoSpan = document.createElement("span");
-                    qnoSpan.className = "question-number";
-                    qnoSpan.innerText = `Câu hỏi ${qNum} / ${questions.length}`;
-                    header.appendChild(qnoSpan);
-                    card.appendChild(header);
-                    
-                    const qtext = document.createElement("div");
-                    qtext.className = "qtext";
-                    qtext.innerText = `Câu ${qNum}: ${q.text}`;
-                    card.appendChild(qtext);
-                    
-                    const choicesContainer = document.createElement("div");
-                    choicesContainer.className = "choices";
-                    
-                    q.choices.forEach((choice, cIdx) => {
-                        const letter = String.fromCharCode(65 + cIdx);
-                        const item = document.createElement("div");
-                        item.className = "choice-item";
-                        if (userAnswers[index] === cIdx) {
-                            item.classList.add("selected");
-                        }
-                        item.onclick = () => {
-                            userAnswers[index] = cIdx;
-                            const navBtn = document.getElementById(`qnbutton-${qNum}`);
-                            if (navBtn) navBtn.classList.add("answered");
-                            
-                            card.querySelectorAll(".choice-item").forEach((ci, ciIdx) => {
-                                if (ciIdx === cIdx) ci.classList.add("selected");
-                                else ci.classList.remove("selected");
-                                
-                                const radio = ci.querySelector('input');
-                                if (radio) radio.checked = (ciIdx === cIdx);
-                            });
-                            
-                            updateNavigationState();
-                        };
-                        
-                        const radio = document.createElement("input");
-                        radio.type = "radio";
-                        radio.name = `q-${index}`;
-                        radio.value = cIdx;
-                        radio.checked = (userAnswers[index] === cIdx);
-                        
-                        const textSpan = document.createElement("span");
-                        textSpan.className = "choice-text";
-                        textSpan.innerText = `${letter}. ${choice}`;
-                        
-                        item.appendChild(radio);
-                        item.appendChild(textSpan);
-                        choicesContainer.appendChild(item);
-                    });
-                    
-                    card.appendChild(choicesContainer);
-                    contentPanel.appendChild(card);
+                    panel.appendChild(createQuestionElement(q, index, qNum));
                 });
                 
-                const submitContainer = document.createElement("div");
-                submitContainer.className = "navigation-buttons";
-                submitContainer.style.justifyContent = "center";
-                const submitBtn = document.createElement("button");
-                submitBtn.className = "nav-btn btn-next";
-                submitBtn.innerText = "Nộp bài thi";
-                submitBtn.onclick = submitExam;
-                submitContainer.appendChild(submitBtn);
-                contentPanel.appendChild(submitContainer);
-                
+                // Active first button on grid by default
                 document.querySelectorAll(".qnbutton").forEach((btn, idx) => {
                     if (idx === 0) btn.classList.add("active");
                     else btn.classList.remove("active");
                 });
-                
+
                 document.getElementById("prev-btn").style.display = "none";
-                document.getElementById("next-btn").style.display = "none";
+                document.getElementById("next-btn").innerText = "Nộp bài thi 🏁";
                 return;
             }
 
@@ -962,36 +1018,7 @@
             if (index < 0 || index >= questions.length) return;
             currentQuestionIdx = index;
             
-            const q = questions[index];
-            document.getElementById("question-number-lbl").innerText = `Câu hỏi ${questionNumber} / ${questions.length}`;
-            document.getElementById("question-text-lbl").innerText = `Câu ${questionNumber}: ${q.text}`;
-
-            const choicesContainer = document.getElementById("choices-container");
-            choicesContainer.innerHTML = "";
-
-            q.choices.forEach((choice, cIdx) => {
-                const letter = String.fromCharCode(65 + cIdx);
-                const item = document.createElement("div");
-                item.className = "choice-item";
-                if (userAnswers[index] === cIdx) {
-                    item.classList.add("selected");
-                }
-                item.onclick = () => selectChoice(index, cIdx);
-
-                const radio = document.createElement("input");
-                radio.type = "radio";
-                radio.name = `q-${index}`;
-                radio.value = cIdx;
-                radio.checked = (userAnswers[index] === cIdx);
-
-                const textSpan = document.createElement("span");
-                textSpan.className = "choice-text";
-                textSpan.innerText = `${letter}. ${choice}`;
-
-                item.appendChild(radio);
-                item.appendChild(textSpan);
-                choicesContainer.appendChild(item);
-            });
+            panel.appendChild(createQuestionElement(questions[index], index, questionNumber));
 
             const buttons = document.querySelectorAll(".qnbutton");
             buttons.forEach((btn, idx) => {
@@ -1002,18 +1029,99 @@
             document.getElementById("prev-btn").disabled = (index === 0);
             const nextBtn = document.getElementById("next-btn");
             if (index === questions.length - 1) {
-                nextBtn.innerText = "Nộp bài";
+                nextBtn.innerText = "Nộp bài thi 🏁";
             } else {
                 nextBtn.innerText = "Tiếp tục";
             }
         };
+
+        function createQuestionElement(q, index, qNum) {
+            const card = document.createElement("div");
+            card.className = "que";
+            card.id = `question-card-${qNum}`;
+
+            const isAnswered = userAnswers[index] !== undefined;
+
+            const info = document.createElement("div");
+            info.className = "info";
+            info.innerHTML = `
+                <div class="no">Câu hỏi ${qNum}</div>
+                <div class="state">${isAnswered ? "Đã trả lời" : "Chưa trả lời"}</div>
+                <div class="grade">Đạt điểm 1,00</div>
+                <a href="javascript:void(0)" class="flag">🚩 Đặt cờ</a>
+            `;
+
+            const content = document.createElement("div");
+            content.className = "content";
+
+            const qtext = document.createElement("div");
+            qtext.className = "qtext";
+            qtext.innerText = q.text;
+            content.appendChild(qtext);
+
+            const ablock = document.createElement("div");
+            ablock.className = "ablock";
+
+            const prompt = document.createElement("div");
+            prompt.className = "prompt";
+            prompt.innerText = "Select one:";
+            ablock.appendChild(prompt);
+
+            const answer = document.createElement("div");
+            answer.className = "answer";
+
+            q.choices.forEach((choice, cIdx) => {
+                const letter = String.fromCharCode(97 + cIdx); // a, b, c, d
+                const choiceItem = document.createElement("div");
+                choiceItem.className = "choice-item";
+                
+                const radio = document.createElement("input");
+                radio.type = "radio";
+                radio.name = `q-${index}`;
+                radio.id = `q-${index}-choice-${cIdx}`;
+                radio.value = cIdx;
+                radio.checked = (userAnswers[index] === cIdx);
+                radio.onclick = () => selectChoice(index, cIdx);
+
+                const label = document.createElement("label");
+                label.htmlFor = `q-${index}-choice-${cIdx}`;
+                label.innerHTML = `<span class="anumber">${letter}.</span> ${choice}`;
+
+                choiceItem.appendChild(radio);
+                choiceItem.appendChild(label);
+                answer.appendChild(choiceItem);
+            });
+
+            ablock.appendChild(answer);
+            content.appendChild(ablock);
+
+            // Add clear choice link
+            const clearLink = document.createElement("div");
+            clearLink.className = "clear-choice";
+            clearLink.innerText = "Clear my choice";
+            clearLink.onclick = () => clearChoice(index);
+            content.appendChild(clearLink);
+
+            card.appendChild(info);
+            card.appendChild(content);
+            return card;
+        }
 
         function selectChoice(questionIndex, choiceIndex) {
             userAnswers[questionIndex] = choiceIndex;
             const navBtn = document.getElementById(`qnbutton-${questionIndex + 1}`);
             if (navBtn) navBtn.classList.add("answered");
 
-            showQuestion(questionIndex + 1);
+            showQuestion(isMultiLayout ? 1 : questionIndex + 1);
+            updateNavigationState();
+        }
+
+        function clearChoice(questionIndex) {
+            delete userAnswers[questionIndex];
+            const navBtn = document.getElementById(`qnbutton-${questionIndex + 1}`);
+            if (navBtn) navBtn.classList.remove("answered");
+
+            showQuestion(isMultiLayout ? 1 : questionIndex + 1);
             updateNavigationState();
         }
 
@@ -1027,7 +1135,7 @@
         }
 
         function nextQuestion() {
-            if (currentQuestionIdx === questions.length - 1) {
+            if (isMultiLayout || currentQuestionIdx === questions.length - 1) {
                 submitExam();
             } else {
                 showQuestion(currentQuestionIdx + 2);
@@ -1044,7 +1152,12 @@
                     setupAntiCheat();
                 })
                 .catch((err) => {
-                    alert("Bạn cần phải cho phép quyền Toàn màn hình để làm bài kiểm tra!");
+                    // Fallback to start without fullscreen for testing ease if blocked
+                    document.getElementById("cover-screen").style.display = "none";
+                    examActive = true;
+                    showQuestion(1);
+                    startTimer();
+                    setupAntiCheat();
                 });
         }
 
@@ -1074,7 +1187,7 @@
             });
 
             document.getElementById("warning-desc-text").innerText = 
-                `Phát hiện vi phạm: ${reason}. Cảnh báo lần ${violationCount}/3.`;
+                `Phát hiện vi phạm: ${reason}. Cảnh báo lần vi phạm thứ ${violationCount}/3.`;
             document.getElementById("warning-overlay").classList.add("show");
             warningOverlayOpen = true;
 
@@ -1091,7 +1204,8 @@
                     warningOverlayOpen = false;
                 })
                 .catch(() => {
-                    alert("Cần bật lại chế độ toàn màn hình để tiếp tục thi!");
+                    document.getElementById("warning-overlay").classList.remove("show");
+                    warningOverlayOpen = false;
                 });
         }
 
