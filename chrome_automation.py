@@ -1721,12 +1721,7 @@ class ChromeAutomation:
                     time.sleep(0.6)
                     continue
                 
-                # If successfully clicked and it is a single-question page, auto-advance!
-                if result and result.get("success") and result.get("status") == "ready" and result.get("isSingleQuestion"):
-                    time.sleep(0.8) # Wait for Next button to appear / React state transition
-                    self.click_next_button(tab, ctx_id)
-                    time.sleep(0.5) # Wait for page transition to complete
-                    
+                # Let the next scan_question call handle navigation to prevent double-click race conditions.
                 return result
             except Exception as e:
                 if retry == max_retries - 1:
